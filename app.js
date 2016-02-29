@@ -3,8 +3,9 @@ var express = require('express'),
     assert = require('assert'),
     MongoClient = require('mongodb').MongoClient;
 
+const URL = 'mongodb://localhost:27017/bookshelf'
 
-MongoClient.connect('mongodb://localhost:27017/bookshelf', function(err, db) {
+MongoClient.connect(URL, function(err, db) {
 
   assert.equal(null, err);
   console.log("Successfully connected to MongoDB.");
@@ -16,7 +17,25 @@ MongoClient.connect('mongodb://localhost:27017/bookshelf', function(err, db) {
     });
   });
 
-  app.use(function(req, res){
+  app.post('/new', function(req, res, next) {
+    var title = req.body.title;
+    var description = req.body.description;
+
+    if (title == '' || description == '') {
+      console.log("all fields must be filled");
+      res.redirect('/');
+    } else {
+      db.collection('books').insertOne(
+        { 'title': title, 'description': description },
+        function (err, r) {
+          assert.equal(null, err);
+          res.redirect('/');
+        }
+      );
+    }
+  });
+
+  app.use(function(req, res) {
     res.sendStatus(404);
   });
 
