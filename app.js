@@ -13,7 +13,7 @@ MongoClient.connect(URL, function(err, db) {
   app.get('/', function(req, res){
     db.collection('books').find({}).toArray(function(err, docs) {
       res.setHeader('Content-type', 'application/json');
-      res.send(docs);
+      res.send({ books: docs });
     });
   });
 
