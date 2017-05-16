@@ -49,6 +49,27 @@ MongoClient.connect(URL, function(err, db) {
     }
   });
 
+  app.post('/update', function(req, res, next) {
+    const id = req.body.id;
+    const content = req.body.content;
+
+    if (id == '' || content == '') {
+      console.log("all fields must be filled");
+      res.redirect('/');
+    } else {
+      db.collection('posts').findAndModify(
+        { 'id': id }, // query
+        [[ '_id' , 'asc' ]], // sort order
+        { $set: { content: content }}, // replace content
+        {}, //options
+        function (err, r) {
+          assert.equal(null, err);
+          res.redirect('/');
+        }
+      );
+    }
+  });
+
   app.use(function(req, res) {
     res.sendStatus(404);
   });
