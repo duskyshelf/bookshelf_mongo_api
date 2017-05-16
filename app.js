@@ -1,7 +1,8 @@
 var express = require('express'),
     app = express(),
     assert = require('assert'),
-    MongoClient = require('mongodb').MongoClient;
+    MongoClient = require('mongodb').MongoClient,
+    bodyParser = require('body-parser');
 
 const URL = 'mongodb://localhost:27017/bookshelf'
 
@@ -9,6 +10,11 @@ MongoClient.connect(URL, function(err, db) {
 
   assert.equal(null, err);
   console.log("Successfully connected to MongoDB.");
+
+  // parse application/x-www-form-urlencoded
+  app.use(bodyParser.urlencoded({ extended: false }))
+  // parse application/json
+  app.use(bodyParser.json())
 
   app.get('/', function(req, res){
     db.collection('books').find({}).toArray(function(err, docs) {
