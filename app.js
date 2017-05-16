@@ -22,9 +22,18 @@ MongoClient.connect(URL, function(err, db) {
     });
   });
 
+  app.get('/id/:id', function(req, res){
+    const id = req.params.id;
+
+    db.collection('posts').find({ id: id }).toArray(function(err, docs) {
+      res.setHeader('Content-type', 'application/json');
+      res.send(docs);
+    });
+  });
+
   app.post('/new', function(req, res, next) {
-    var id = req.body.id;
-    var content = req.body.content;
+    const id = req.body.id;
+    const content = req.body.content;
 
     if (id == '' || content == '') {
       console.log("all fields must be filled");
