@@ -1,38 +1,37 @@
-var express = require('express'),
-    app = express(),
-    assert = require('assert'),
-    MongoClient = require('mongodb').MongoClient,
-    bodyParser = require('body-parser');
+const assert = require('assert');
+const bodyParser = require('body-parser');
+const express = require('express');
+const MongoClient = require('mongodb').MongoClient;
 
-const URL = 'mongodb://localhost:27017/bookshelf'
+const app = express();
+
+const URL = 'mongodb://localhost:27017/default'
 
 MongoClient.connect(URL, function(err, db) {
 
   assert.equal(null, err);
   console.log("Successfully connected to MongoDB.");
 
-  // parse application/x-www-form-urlencoded
-  app.use(bodyParser.urlencoded({ extended: false }))
-  // parse application/json
-  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
+  app.use(bodyParser.json()); // parse application/json
 
   app.get('/', function(req, res){
-    db.collection('books').find({}).toArray(function(err, docs) {
+    db.collection('posts').find({}).toArray(function(err, docs) {
       res.setHeader('Content-type', 'application/json');
-      res.send({ books: docs });
+      res.send({ posts: docs });
     });
   });
 
   app.post('/new', function(req, res, next) {
-    var title = req.body.title;
-    var description = req.body.description;
+    var id = req.body.id;
+    var content = req.body.content;
 
-    if (title == '' || description == '') {
+    if (id == '' || content == '') {
       console.log("all fields must be filled");
       res.redirect('/');
     } else {
-      db.collection('books').insertOne(
-        { 'title': title, 'description': description },
+      db.collection('posts').insertOne(
+        { 'id': id, 'content': content },
         function (err, r) {
           assert.equal(null, err);
           res.redirect('/');

@@ -1,13 +1,13 @@
 {
-  "name": "bookshelfapiv2",
+  "name": "express-mongo-api",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "seeddb": "mongoimport --db=bookshelf --collection=books --type=json --jsonArray ./mongoseeds/books.json",
-    "dropdb": "mongo bookshelf --eval 'db.dropDatabase()'"
+    "seeddb": "mongoimport --db=default --collection=posts --type=json --jsonArray ./mongoseeds/posts.json",
+    "dropdb": "mongo default --eval 'db.dropDatabase()'"
   },
   "author": "",
   "license": "ISC",
