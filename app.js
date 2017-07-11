@@ -2,8 +2,10 @@ const assert = require('assert');
 const bodyParser = require('body-parser');
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
+const cors = require('cors')
 
 const app = express();
+app.use(cors());
 
 const URL = 'mongodb://localhost:27017/default'
 
@@ -77,7 +79,7 @@ MongoClient.connect(URL, (err, db) => {
     res.sendStatus(404);
   });
 
-  const server = app.listen(3000, () => {
+  const server = app.listen(3100, () => {
       const port = server.address().port;
       console.log('Express server listening on port %s.', port);
   });
